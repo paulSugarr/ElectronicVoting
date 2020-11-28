@@ -5,4 +5,12 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Agencies" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="fastJSON" Version="2.3.5.3" />
+    </ItemGroup>
+
 </Project>
