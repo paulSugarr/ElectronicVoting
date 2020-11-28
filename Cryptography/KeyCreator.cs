@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 
-namespace ElectronicVoting.Electors
+namespace ElectronicVoting.Cryptography
 {
     public static class KeyCreator
     {
         public static byte[] CreatePrivateKey()
         {
-            throw new NotImplementedException();
+            var rsa = RSA.Create();
+            return rsa.ExportRSAPrivateKey();
         }
         public static byte[] CreatePublicKey(byte[] privateKey)
         {
-            throw new NotImplementedException();
+            var rsa = RSA.Create();
+            rsa.ImportRSAPrivateKey(privateKey, out _);
+            return rsa.ExportRSAPublicKey();
         }
     }
 }

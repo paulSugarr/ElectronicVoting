@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace ElectronicVoting.Cryptography
 {
@@ -7,7 +8,10 @@ namespace ElectronicVoting.Cryptography
 
         public static byte[] Encrypt(byte[] publicKey, byte[] data)
         {
-            throw new NotImplementedException();
+            var rsa = RSA.Create();
+            rsa.ImportRSAPublicKey(publicKey, out _);
+            var result = rsa.Encrypt(data, RSAEncryptionPadding.Pkcs1);
+            return result;
         }
 
         public static byte[] Decrypt(byte[] secretKey, byte[] data)
@@ -17,7 +21,10 @@ namespace ElectronicVoting.Cryptography
 
         public static byte[] SignData(byte[] privateKey, byte[] data)
         {
-            throw new NotImplementedException();
+            var rsa = RSA.Create();
+            rsa.ImportRSAPrivateKey(privateKey, out _);
+            var result = rsa.SignData(data, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            return result;
         }
         public static bool VerifyData(byte[] publicKey, byte[] data, byte[] signedData)
         {
