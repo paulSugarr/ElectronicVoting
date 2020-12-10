@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ElectronicVoting.Cryptography;
-using ElectronicVoting.Electors;
 
 namespace ElectronicVoting
 {
@@ -11,11 +8,9 @@ namespace ElectronicVoting
     {
         static void Main(string[] args)
         {
-            var rsaKeys = new RSAKeyCreator();
-            var privateKey = rsaKeys.CreatePrivateKey();
-            var publicKey = rsaKeys.CreatePublicKey(privateKey);
-            
             var rsa = new RSACryptography();
+            var privateKey = rsa.KeyCreator.CreatePrivateKey();
+            var publicKey = rsa.KeyCreator.CreatePublicKey(privateKey);
             var msg = Encoding.UTF7.GetBytes("sdlfjsf;slkfslkfddfshkfksjfhsjhfsjldfslkjfslakddsfklsjdflsdkfjsjgakdglkjjkdfhgdkjfghlskdhgklshdglsjdfhgjshfjsdhfkshfsdgfjshgfasldhalskdjalskfsdhjkfsdhfgsfkjaghsjlkfhasdohdfgskljafskhfgkflsdjfkljnzjzzmnznzzzzzzzzzzzzzz");
             Console.WriteLine(Encoding.UTF7.GetString(msg));
             var encrypted = rsa.Encrypt(publicKey, msg);
