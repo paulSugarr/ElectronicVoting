@@ -11,13 +11,14 @@ namespace ElectronicVoting
     {
         static void Main(string[] args)
         {
-            var privateKey = KeyCreator.CreatePrivateKey();
-            var publicKey = KeyCreator.CreatePublicKey(privateKey);
-
+            var privateKey = RSAKeyCreator.CreatePrivateKey();
+            var publicKey = RSAKeyCreator.CreatePublicKey(privateKey);
+            
+            var rsa = new RSACryptography();
             var msg = Encoding.UTF7.GetBytes("sdlfjsf;slkfslkfddfshkfksjfhsjhfsjldfslkjfslakddsfklsjdflsdkfjsjgakdglkjjkdfhgdkjfghlskdhgklshdglsjdfhgjshfjsdhfkshfsdgfjshgfasldhalskdjalskfsdhjkfsdhfgsfkjaghsjlkfhasdohdfgskljafskhfgkflsdjfkljnzjzzmnznzzzzzzzzzzzzzz");
             Console.WriteLine(Encoding.UTF7.GetString(msg));
-            var encrypted = CryptographyProvider.Encrypt(publicKey, msg);
-            var decrypted = CryptographyProvider.Decrypt(privateKey, encrypted);
+            var encrypted = rsa.Encrypt(publicKey, msg);
+            var decrypted = rsa.Decrypt(privateKey, encrypted);
             Console.WriteLine(Encoding.UTF7.GetString(decrypted));
             
             // var signB = CryptographyProvider.SignData(privateKey, B);

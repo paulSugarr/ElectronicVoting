@@ -7,7 +7,7 @@ using BigInt = System.Numerics.BigInteger;
 
 namespace ElectronicVoting.Cryptography
 {
-    public static class KeyCreator
+    public static class RSAKeyCreator
     {
         public static Dictionary<string, object> CreatePrivateKey()
         {
