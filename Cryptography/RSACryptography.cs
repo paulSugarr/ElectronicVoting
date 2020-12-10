@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using ElectronicVoting.Extensions;
 using BigInt = System.Numerics.BigInteger;
 
@@ -40,12 +42,26 @@ namespace ElectronicVoting.Cryptography
 
         public byte[] SignData(Dictionary<string, object> privateKey, byte[] data)
         {
-            throw new NotImplementedException();
+            var d = BigInt.Parse(privateKey.GetString("d"));
+            var n = BigInt.Parse(privateKey.GetString("n"));
+
+            var m = new BigInt(data);
+
+            var s = BigInt.ModPow(m, d, n);
+            var result = s.ToByteArray();
+            return result;
         }
 
         public bool VerifyData(Dictionary<string, object> publicKey, byte[] data, byte[] signedData)
         {
-            throw new NotImplementedException();
+            var e = BigInt.Parse(publicKey.GetString("e"));
+            var n = BigInt.Parse(publicKey.GetString("n"));
+
+            var s = new BigInt(signedData);
+
+            var m = BigInt.ModPow(s, e, n);
+            var result = m.ToByteArray();
+            return result.SequenceEqual(data);
         }
     }
 }
