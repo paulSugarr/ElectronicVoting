@@ -34,6 +34,10 @@ namespace ElectronicVoting.Extensions
         {
             return GetList(target, key).Cast<string>().ToArray();
         }
+        public static byte[] GetByteArray(this Dictionary<string, object> target, string key)
+        {
+            return GetList(target, key).Cast<byte>().ToArray();
+        }
         public static Dictionary<string, object> GetDictionary(this Dictionary<string, object> target, string key)
         {
             return (Dictionary<string, object>)target[key];
