@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using ElectronicVoting.Extensions;
+using BigInt = System.Numerics.BigInteger;
 
 namespace ElectronicVoting.Cryptography
 {
@@ -12,24 +13,24 @@ namespace ElectronicVoting.Cryptography
 
         public static byte[] Encrypt(Dictionary<string, object> publicKey, byte[] data)
         {
-            var e = BigInteger.Parse(publicKey.GetString("e"));
-            var n = BigInteger.Parse(publicKey.GetString("n"));
+            var e = BigInt.Parse(publicKey.GetString("e"));
+            var n = BigInt.Parse(publicKey.GetString("n"));
             // var dataString = Encoding.UTF8.GetString(data);
-            var m = new BigInteger(data);
+            var m = new BigInt(data);
 
-            var c = BigInteger.ModPow(m, e, n);
+            var c = BigInt.ModPow(m, e, n);
             var result = c.ToByteArray();
             return result;
         }
 
         public static byte[] Decrypt(Dictionary<string, object> privateKey, byte[] data)
         {
-            var d = BigInteger.Parse(privateKey.GetString("d"));
-            var n = BigInteger.Parse(privateKey.GetString("n"));
+            var d = BigInt.Parse(privateKey.GetString("d"));
+            var n = BigInt.Parse(privateKey.GetString("n"));
             // var dataString = Encoding.UTF8.GetString(data);
-            var c = new BigInteger(data);
+            var c = new BigInt(data);
 
-            var m = BigInteger.ModPow(c, d, n);
+            var m = BigInt.ModPow(c, d, n);
             var result = m.ToByteArray();
             return result;
         }
