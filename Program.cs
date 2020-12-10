@@ -11,8 +11,9 @@ namespace ElectronicVoting
     {
         static void Main(string[] args)
         {
-            var privateKey = RSAKeyCreator.CreatePrivateKey();
-            var publicKey = RSAKeyCreator.CreatePublicKey(privateKey);
+            var rsaKeys = new RSAKeyCreator();
+            var privateKey = rsaKeys.CreatePrivateKey();
+            var publicKey = rsaKeys.CreatePublicKey(privateKey);
             
             var rsa = new RSACryptography();
             var msg = Encoding.UTF7.GetBytes("sdlfjsf;slkfslkfddfshkfksjfhsjhfsjldfslkjfslakddsfklsjdflsdkfjsjgakdglkjjkdfhgdkjfghlskdhgklshdglsjdfhgjshfjsdhfkshfsdgfjshgfasldhalskdjalskfsdhjkfsdhfgsfkjaghsjlkfhasdohdfgskljafskhfgkflsdjfkljnzjzzmnznzzzzzzzzzzzzzz");
