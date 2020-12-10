@@ -7,9 +7,9 @@ using BigInt = System.Numerics.BigInteger;
 
 namespace ElectronicVoting.Cryptography
 {
-    public static class RSAKeyCreator
+    public class RSAKeyCreator : IKeyCreator
     {
-        public static Dictionary<string, object> CreatePrivateKey()
+        public Dictionary<string, object> CreatePrivateKey()
         {
             var rand = new Random();
             var pp = RandomPrime(1024, rand);
@@ -41,7 +41,7 @@ namespace ElectronicVoting.Cryptography
             result.Add("d", d.ToString());
             return result;
         }
-        public static Dictionary<string, object> CreatePublicKey(Dictionary<string, object> privateKey)
+        public Dictionary<string, object> CreatePublicKey(Dictionary<string, object> privateKey)
         {
             var result = new Dictionary<string, object>();
             result.Add("n", privateKey["n"]);

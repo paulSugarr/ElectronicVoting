@@ -29,10 +29,10 @@ namespace ElectronicVoting.Electors
 
         public void CreateNewKeys()
         {
-            _privateKey = RSAKeyCreator.CreatePrivateKey();
-            _publicEncryptionKey = RSAKeyCreator.CreatePublicKey(_privateKey);
-            _publicSignKey = RSAKeyCreator.CreatePublicKey(_privateKey);
-            _blindKey = RSAKeyCreator.CreatePublicKey(_privateKey);
+            _privateKey = _cryptographyProvider.KeyCreator.CreatePrivateKey();
+            _publicEncryptionKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
+            _publicSignKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
+            _blindKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
         }
         
         /// <summary> Step 2 in E-voting protocol</summary>

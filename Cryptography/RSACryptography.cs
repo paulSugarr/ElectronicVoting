@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Security.Cryptography;
-using System.Text;
 using ElectronicVoting.Extensions;
 using BigInt = System.Numerics.BigInteger;
 
@@ -10,6 +7,12 @@ namespace ElectronicVoting.Cryptography
 {
     public class RSACryptography : ICryptographyProvider
     {
+        public IKeyCreator KeyCreator { get; }
+
+        public RSACryptography()
+        {
+            KeyCreator = new RSAKeyCreator();
+        }
 
         public byte[] Encrypt(Dictionary<string, object> publicKey, byte[] data)
         {
@@ -39,6 +42,7 @@ namespace ElectronicVoting.Cryptography
         {
             throw new NotImplementedException();
         }
+
         public bool VerifyData(Dictionary<string, object> publicKey, byte[] data, byte[] signedData)
         {
             throw new NotImplementedException();
