@@ -6,8 +6,8 @@ namespace ElectronicVoting.Cryptography
     {
         byte[] Encrypt(Dictionary<string, object> publicKey, byte[] data);
         byte[] Decrypt(Dictionary<string, object> privateKey, byte[] data);
-        byte[] SignData(byte[] privateKey, byte[] data);
-        bool VerifyData(byte[] publicKey, byte[] data, byte[] signedData);
+        byte[] SignData(Dictionary<string, object> privateKey, byte[] data);
+        bool VerifyData(Dictionary<string, object> publicKey, byte[] data, byte[] signedData);
         IKeyCreator KeyCreator { get; }
     }
 }

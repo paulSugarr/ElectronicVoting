@@ -38,12 +38,12 @@ namespace ElectronicVoting.Cryptography
             return result;
         }
 
-        public byte[] SignData(byte[] privateKey, byte[] data)
+        public byte[] SignData(Dictionary<string, object> privateKey, byte[] data)
         {
             throw new NotImplementedException();
         }
 
-        public bool VerifyData(byte[] publicKey, byte[] data, byte[] signedData)
+        public bool VerifyData(Dictionary<string, object> publicKey, byte[] data, byte[] signedData)
         {
             throw new NotImplementedException();
         }
