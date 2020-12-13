@@ -48,6 +48,15 @@ namespace ElectronicVoting.Cryptography
             result.Add("e", privateKey["e"]);
             return result;
         }
+
+        public Dictionary<string, object> CreateBlindKey()
+        {
+            var rand = new Random();
+            var r = rand.Next(1000000, 5000000);
+            var result = new Dictionary<string, object>();
+            result.Add("r", r.ToString());
+            return result;
+        }
         private static BigInt Gcd(BigInt a, BigInt b, out BigInt x, out BigInt y)
         {
             if (b < a)
