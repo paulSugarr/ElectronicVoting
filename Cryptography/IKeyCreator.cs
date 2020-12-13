@@ -6,5 +6,6 @@ namespace ElectronicVoting.Cryptography
     {
         Dictionary<string, object> CreatePrivateKey();
         Dictionary<string, object> CreatePublicKey(Dictionary<string, object> privateKey);
+        Dictionary<string, object> CreateBlindKey();
     }
 }
