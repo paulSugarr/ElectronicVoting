@@ -38,12 +38,21 @@ namespace ElectronicVoting.Electors
         /// <summary> Step 2 in E-voting protocol</summary>
         public byte[] CreateBlindedSignedMessage(int choiceIndex)
         {
-            var bulletin = CreateBulletin(0);
+            var bulletin = CreateBulletin(choiceIndex);
             var data = Encoding.UTF8.GetBytes(bulletin);
             var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
             var signEncryptB = _cryptographyProvider.SignData(_publicSignKey, encryptB);
             var blindSignEncryptB = _cryptographyProvider.Encrypt(_blindKey, signEncryptB);
             return blindSignEncryptB;
+        }
+
+        public byte[] CreateBlindedMessage(int choiceIndex)
+        {
+            var bulletin = CreateBulletin(choiceIndex);
+            var data = Encoding.UTF8.GetBytes(bulletin);
+            var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
+            var blindEncryptB = _cryptographyProvider.Encrypt(_blindKey, encryptB);
+            return blindEncryptB;
         }
         
         /// <summary> Step 4 in E-voting protocol</summary>
