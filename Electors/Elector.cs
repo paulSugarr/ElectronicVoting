@@ -7,6 +7,9 @@ namespace ElectronicVoting.Electors
 {
     public class Elector
     {
+        public IReadOnlyDictionary<string, object> PublicSignKey => _publicSignKey;
+        
+        private Dictionary<string, object> _validatorPublicKey;
         private Dictionary<string, object> _privateKey;
         private Dictionary<string, object> _publicEncryptionKey;
         private Dictionary<string, object> _publicSignKey;
@@ -14,17 +17,19 @@ namespace ElectronicVoting.Electors
 
         private ICryptographyProvider _cryptographyProvider;
 
-        public Elector()
+        public Elector(ICryptographyProvider cryptographyProvider, Dictionary<string, object> validatorPublicKey)
         {
-            
+            _cryptographyProvider = cryptographyProvider;
+            _validatorPublicKey = validatorPublicKey;
         }
-        public Elector(ICryptographyProvider cryptographyProvider, Dictionary<string, object> initialData)
+        public Elector(ICryptographyProvider cryptographyProvider, Dictionary<string, object> initialData, Dictionary<string, object> validatorPublicKey)
         {
             _cryptographyProvider = cryptographyProvider;
             _privateKey = initialData.GetDictionary("private_key");
             _publicEncryptionKey = initialData.GetDictionary("public_encrypt_key");
             _publicSignKey = initialData.GetDictionary("public_sign_key");
             _blindKey = initialData.GetDictionary("blind_key");
+            _validatorPublicKey = validatorPublicKey;
         }
 
         public void CreateNewKeys()
@@ -32,7 +37,7 @@ namespace ElectronicVoting.Electors
             _privateKey = _cryptographyProvider.KeyCreator.CreatePrivateKey();
             _publicEncryptionKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
             _publicSignKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
-            _blindKey = _cryptographyProvider.KeyCreator.CreatePublicKey(_privateKey);
+            _blindKey = _cryptographyProvider.KeyCreator.CreateBlindKey();
         }
         
         /// <summary> Step 2 in E-voting protocol</summary>
@@ -41,8 +46,8 @@ namespace ElectronicVoting.Electors
             var bulletin = CreateBulletin(choiceIndex);
             var data = Encoding.UTF8.GetBytes(bulletin);
             var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
-            var signEncryptB = _cryptographyProvider.SignData(_publicSignKey, encryptB);
-            var blindSignEncryptB = _cryptographyProvider.Encrypt(_blindKey, signEncryptB);
+            var signEncryptB = _cryptographyProvider.SignData(_privateKey, encryptB);
+            var blindSignEncryptB = _cryptographyProvider.BlindData(_blindKey, _validatorPublicKey, signEncryptB);
             return blindSignEncryptB;
         }
 
@@ -51,14 +56,14 @@ namespace ElectronicVoting.Electors
             var bulletin = CreateBulletin(choiceIndex);
             var data = Encoding.UTF8.GetBytes(bulletin);
             var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
-            var blindEncryptB = _cryptographyProvider.Encrypt(_blindKey, encryptB);
+            var blindEncryptB = _cryptographyProvider.BlindData(_blindKey, _validatorPublicKey, encryptB);
             return blindEncryptB;
         }
         
         /// <summary> Step 4 in E-voting protocol</summary>
         public byte[] RemoveBlindEncryption(byte[] blindedMessage)
         {
-            var result = _cryptographyProvider.Decrypt(_privateKey, blindedMessage);
+            var result = _cryptographyProvider.UnBlindData(_blindKey, _validatorPublicKey, blindedMessage);
             return result;
         }
         

@@ -17,8 +17,8 @@ namespace ElectronicVoting.Cryptography
 
             var p = BigInt.Parse(pp.ToString());
             var q = BigInt.Parse(qq.ToString());
-            Console.WriteLine($"p = {p}");
-            Console.WriteLine($"q = {q}");
+            // Console.WriteLine($"p = {p}");
+            // Console.WriteLine($"q = {q}");
             var n = q * p;
             var phi = (p - 1) * (q - 1);
             var e = Gcd(p, q, out _, out _);

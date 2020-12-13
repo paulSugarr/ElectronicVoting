@@ -33,6 +33,10 @@ namespace ElectronicVoting.Validators
         {
             return _cryptographyProvider.VerifyData(publicElectorKey, blindedData, signedBlindedData);
         }
-        
+
+        public byte[] SignBulletin(byte[] blindedData)
+        {
+            return _cryptographyProvider.SignData(_privateKey, blindedData);
+        }
     }
 }
