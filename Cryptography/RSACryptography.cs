@@ -63,5 +63,25 @@ namespace ElectronicVoting.Cryptography
             var result = m.ToByteArray();
             return result.SequenceEqual(data);
         }
+
+        public byte[] UnBlindData(Dictionary<string, object> blindKey, Dictionary<string, object> signKey, byte[] blindedData)
+        {
+            var r = BigInt.Parse(blindKey.GetString("r"));
+            var e = BigInt.Parse(signKey.GetString("e"));
+            var n = BigInt.Parse(signKey.GetString("n"));
+            var multiplier = BigInt.ModPow(r, e, n);
+            var m = new BigInt(blindedData);
+            return (m / multiplier).ToByteArray();
+        }
+
+        public byte[] BlindData(Dictionary<string, object> blindKey, Dictionary<string, object> signKey, byte[] data)
+        {
+            var r = BigInt.Parse(blindKey.GetString("r"));
+            var e = BigInt.Parse(signKey.GetString("e"));
+            var n = BigInt.Parse(signKey.GetString("n"));
+            var multiplier = BigInt.ModPow(r, e, n);
+            var m = new BigInt(data);
+            return (m * multiplier).ToByteArray();
+        }
     }
 }
