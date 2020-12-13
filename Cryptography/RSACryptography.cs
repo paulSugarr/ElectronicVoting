@@ -61,6 +61,7 @@ namespace ElectronicVoting.Cryptography
 
             var m = BigInt.ModPow(s, e, n);
             var result = m.ToByteArray();
+            
             return result.SequenceEqual(data);
         }
 
@@ -69,9 +70,11 @@ namespace ElectronicVoting.Cryptography
             var r = BigInt.Parse(blindKey.GetString("r"));
             var e = BigInt.Parse(signKey.GetString("e"));
             var n = BigInt.Parse(signKey.GetString("n"));
-            var multiplier = BigInt.ModPow(r, e, n);
+
+            var inversedR = r.GetInversed(n);
             var m = new BigInt(blindedData);
-            return (m / multiplier).ToByteArray();
+            var result = BigInt.ModPow(m * inversedR, 1, n);
+            return result.ToByteArray();
         }
 
         public byte[] BlindData(Dictionary<string, object> blindKey, Dictionary<string, object> signKey, byte[] data)
@@ -79,9 +82,10 @@ namespace ElectronicVoting.Cryptography
             var r = BigInt.Parse(blindKey.GetString("r"));
             var e = BigInt.Parse(signKey.GetString("e"));
             var n = BigInt.Parse(signKey.GetString("n"));
-            var multiplier = BigInt.ModPow(r, e, n);
+            var multiplier = BigInt.Pow(r, (int) e);
             var m = new BigInt(data);
-            return (m * multiplier).ToByteArray();
+            var result = BigInt.ModPow(m * multiplier, 1, n);
+            return result.ToByteArray();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ElectronicVoting.Cryptography
     {
         public Dictionary<string, object> CreatePrivateKey()
         {
-            var rand = new Random();
+            var rand = new Random(DateTimeOffset.UtcNow.Millisecond);
             var pp = RandomPrime(1024, rand);
             var qq = RandomPrime(1024, rand);
 
@@ -21,7 +21,7 @@ namespace ElectronicVoting.Cryptography
             // Console.WriteLine($"q = {q}");
             var n = q * p;
             var phi = (p - 1) * (q - 1);
-            var e = Gcd(p, q, out _, out _);
+            var e = RandomPrime(8, rand);
             Gcd(e, phi, out var x, out var y);
 
             var d = x > 0 ? x : x + phi;
@@ -51,7 +51,7 @@ namespace ElectronicVoting.Cryptography
 
         public Dictionary<string, object> CreateBlindKey()
         {
-            var rand = new Random();
+            var rand = new Random(DateTimeOffset.UtcNow.Millisecond);
             var r = rand.Next(1000000, 5000000);
             var result = new Dictionary<string, object>();
             result.Add("r", r.ToString());

@@ -43,19 +43,14 @@ namespace ElectronicVoting.Electors
         /// <summary> Step 2 in E-voting protocol</summary>
         public byte[] CreateBlindedSignedMessage(int choiceIndex)
         {
-            var bulletin = CreateBulletin(choiceIndex);
-            var data = Encoding.UTF8.GetBytes(bulletin);
-            var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
-            var signEncryptB = _cryptographyProvider.SignData(_privateKey, encryptB);
-            var blindSignEncryptB = _cryptographyProvider.BlindData(_blindKey, _validatorPublicKey, signEncryptB);
-            return blindSignEncryptB;
+            var blinded = CreateBlindedMessage(choiceIndex);
+            var signed = _cryptographyProvider.SignData(_privateKey, blinded);
+            return signed;
         }
 
         public byte[] CreateBlindedMessage(int choiceIndex)
         {
-            var bulletin = CreateBulletin(choiceIndex);
-            var data = Encoding.UTF8.GetBytes(bulletin);
-            var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
+            var encryptB = GetEncryptedBulletin(choiceIndex);
             var blindEncryptB = _cryptographyProvider.BlindData(_blindKey, _validatorPublicKey, encryptB);
             return blindEncryptB;
         }
@@ -71,6 +66,20 @@ namespace ElectronicVoting.Electors
         public Dictionary<string, object> GetPrivateKey()
         {
             return _privateKey;
+        }
+
+        public byte[] GetEncryptedBulletin(int choiceIndex)
+        {
+            var bulletin = CreateBulletin(choiceIndex);
+            var data = Encoding.UTF8.GetBytes(bulletin);
+            var encryptB = _cryptographyProvider.Encrypt(_publicEncryptionKey, data);
+            return encryptB;
+        }
+
+        public byte[] GetSignedEncryptedBulletin(int choiceIndex)
+        {
+            var encrypted = GetEncryptedBulletin(choiceIndex);
+            return _cryptographyProvider.SignData(_privateKey, encrypted);
         }
         private string CreateBulletin(int choiceIndex)
         {
