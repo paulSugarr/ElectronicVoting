@@ -10,4 +10,9 @@
       <PackageReference Include="fastJSON" Version="2.3.5.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Core" />
+      <Folder Include="Server" />
+    </ItemGroup>
+
 </Project>
